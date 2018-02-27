@@ -21,6 +21,7 @@ pipeline {
                     steps {
                         sh 'date'
                         echo "Running the second test suite"
+                        sh 'not-a-real-command'
                     }
                 }
             }
