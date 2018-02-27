@@ -10,7 +10,17 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                parallel (
+                a: {
+                    echo 'Testing..'
+                    sh 'date'
+                },
+                b: {
+                    echo 'Parallel Jobs'
+                    sh 'date'
+                }
+
+                )
             }
         }
         stage('Deploy') {
