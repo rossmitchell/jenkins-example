@@ -50,6 +50,9 @@ pipeline {
                     }
                 }
                 stage('Really should be some where else 3') {
+                    agent {
+                         label: container
+                    }
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
