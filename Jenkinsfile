@@ -9,18 +9,20 @@ pipeline {
             }
         }
         stage('Test') {
-            steps {
-                parallel (
-                a: {
-                    echo 'Testing..'
-                    sh 'date'
-                },
-                b: {
-                    echo 'Parallel Jobs'
-                    sh 'date'
+            parallel {
+                stage('Run First Test') {
+                    steps {
+                        sh 'sleep 2'
+                        echo "Running the first Test Suite"
+                        sh 'date'
+                    }
                 }
-
-                )
+                stage('Run Second Test') {
+                    steps {
+                        sh 'date'
+                        echo "Running the second test suite"
+                    }
+                }
             }
         }
         stage('Deploy') {
