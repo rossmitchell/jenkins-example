@@ -27,14 +27,18 @@ pipeline {
                     }
                 }
                 stage('Run Test on different Machine?') {
-                    echo 'Should be somewhere else'
-                    sh 'sleep 5'
-                    echo 'done'
+                    steps {
+                        echo 'Should be somewhere else'
+                        sh 'sleep 5'
+                        echo 'done'
+                    }
                 }
                 stage('Really should be some where else') {
-                    echo 'Please let this work'
-                    sh 'hostname'
-                    echo 'Done'
+                    steps {
+                        echo 'Please let this work'
+                        sh 'hostname'
+                        echo 'Done'
+                    }
                 }
             }
         }
