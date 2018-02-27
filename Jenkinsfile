@@ -36,6 +36,23 @@ pipeline {
                 stage('Really should be some where else') {
                     steps {
                         echo 'Please let this work'
+                        sh 'sleep 60'
+                        sh 'hostname'
+                        echo 'Done'
+                    }
+                }
+                stage('Really should be some where else 2') {
+                    steps {
+                        echo 'Please let this work'
+                        sh 'sleep 60'
+                        sh 'hostname'
+                        echo 'Done'
+                    }
+                }
+                stage('Really should be some where else 3') {
+                    steps {
+                        echo 'Please let this work'
+                        sh 'sleep 60'
                         sh 'hostname'
                         echo 'Done'
                     }
