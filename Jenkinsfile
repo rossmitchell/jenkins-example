@@ -12,6 +12,7 @@ pipeline {
             parallel {
                 stage('Run First Test') {
                     steps {
+                        sh 'touch testFile'
                         sh 'sleep 2'
                         echo "Running the first Test Suite"
                         sh 'date'
