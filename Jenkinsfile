@@ -51,7 +51,7 @@ pipeline {
                 }
                 stage('Really should be some where else 3') {
                     agent {
-                         label: container
+                         label "container"
                     }
                     steps {
                         echo 'Please let this work'
