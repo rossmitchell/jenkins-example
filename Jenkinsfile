@@ -56,6 +56,7 @@ pipeline {
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
+                        sh 'not-a-real-command'
                         sh 'hostname'
                         echo 'Done'
                     }
@@ -66,6 +67,11 @@ pipeline {
             steps {
                 echo 'Deploying....'
             }
+        }
+    }
+    post {
+        always {
+            echo "Will always run"
         }
     }
 }
