@@ -41,4 +41,4 @@
         mode: 0555
 
     - name: associate machine with jenkins
-      command: "java -jar ./swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name `hostname` -labels  -executors 1"
+      command: "java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name `hostname` -labels  -executors 1"
