@@ -6,6 +6,7 @@ pipeline {
             steps {
                 sh 'whoami'
                 echo 'Building..'
+                echo '${my_env_var}'
             }
         }
         stage('Test') {
@@ -50,9 +51,6 @@ pipeline {
                     }
                 }
                 stage('Really should be some where else 3') {
-                    agent {
-                         label "container"
-                    }
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
