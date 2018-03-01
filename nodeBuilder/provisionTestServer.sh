@@ -28,7 +28,7 @@ set -x
 for ((server=0;server<${numberOfServers};server++))
 do
     serverName="${groupName}-${server}"
-    hcloud server create --name ${serverName} --image debian-9 --type cx11 --ssh-key Edmonds
+    hcloud server create --name ${serverName} --image debian-9 --type cx11 --ssh-key jenkinsServer
     serverIp=$(hcloud server list -o noheader | grep ${serverName} | awk '{print $4}')
     echo "${serverIp} ansible_ssh_user=root" >> hosts
 done
