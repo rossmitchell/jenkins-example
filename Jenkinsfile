@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'whoami'
+                sh 'env'
                 echo 'Building..'
                 echo "${my_env_var}"
             }
