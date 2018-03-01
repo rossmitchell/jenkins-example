@@ -24,7 +24,6 @@ groupName=$(dbus-uuidgen)
 echo ${groupName} > serverGroup
 echo '[jenkins]' > hosts
 
-set -x
 for ((server=0;server<${numberOfServers};server++))
 do
     serverName="${groupName}-${server}"
@@ -34,9 +33,9 @@ do
 done
 
 echo "Waiting until servers have all come up"
-until ping -c 1 -W 1 ${serverIp} > /dev/null; do
+until ping -c 5 -W 1 ${serverIp} > /dev/null; do
     printf '.'
-    sleep 1
+    sleep 2
 done
 
 ansible-playbook playbook.yml
