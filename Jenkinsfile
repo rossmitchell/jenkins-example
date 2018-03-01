@@ -6,7 +6,6 @@ pipeline {
             steps {
                 sh 'nodeBuilder/provisionTestServer.sh 2'
                 echo 'Building..'
-                echo "${my_env_var}"
             }
         }
         stage('Test') {
@@ -68,7 +67,8 @@ pipeline {
     }
     post {
         always {
-            echo "Will always run"
+            echo "Remove the servers that have been created"
+            sh 'nodeBuilder/destroyTestServers.sh'
         }
     }
 }
