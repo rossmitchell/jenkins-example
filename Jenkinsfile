@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh 'whoami'
                 echo 'Building..'
-                echo '${my_env_var}'
+                echo "${my_env_var}"
             }
         }
         stage('Test') {
