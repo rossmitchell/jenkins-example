@@ -9,6 +9,7 @@
     - geerlingguy.ntp
     - geerlingguy.nginx
     - geerlingguy.php
+    - geerlingguy.java
     - geerlingguy.composer
     - geerlingguy.mysql
 
@@ -33,13 +34,11 @@
         priv: "{{ magento_db_name }}.*:ALL"
         state: present
 
-    - name: remove old m2 directory
-      file:
-        state: absent
-        path: /var/www/vhosts/magento2
+    - name: get the swarm JAR
+      get_url:
+        url: "{{ jenkins_url }}swarm/swarm-client.jar"
+        dest: /tmp/swarm-client.jar
+        mode: 0555
 
-    - name: create m2 directory
-      file:
-        state: directory
-        path: /var/www/vhosts/magento2
-        mode: 0755
+    - name: associate machine with jenkins
+      command: "java -jar ./swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }} -password {{ jenkins_password }} -name `hostname` -labels  -executors 1"

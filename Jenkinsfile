@@ -4,9 +4,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'env'
-                echo "$JENKINS_URL"
-                sh 'stop-here'
                 sh 'nodeBuilder/provisionTestServer.sh 2'
                 echo 'Building..'
             }

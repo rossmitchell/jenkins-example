@@ -13,4 +13,8 @@ magento_composer_password: ''
 magento_db_name: magento2
 magento_db_user: magento2
 magento_db_pass: magento2
+# Swarm settings
+jenkins_url: http://195.201.90.139:8080/
+jenkins_username: admin
+jenkins_password: admin
 
