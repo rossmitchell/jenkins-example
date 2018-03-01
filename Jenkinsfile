@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'env'
+                sh 'nodeBuilder/provisionTestServer.sh 2'
                 echo 'Building..'
                 echo "${my_env_var}"
             }

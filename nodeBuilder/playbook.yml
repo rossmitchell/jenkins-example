@@ -1,0 +1,45 @@
+---
+- hosts: jenkins
+  sudo: yes
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - geerlingguy.git
+    - geerlingguy.ntp
+    - geerlingguy.nginx
+    - geerlingguy.php
+    - geerlingguy.composer
+    - geerlingguy.mysql
+
+  tasks:
+
+    - name: create the magento composer auth file
+      template:
+        src: templates/root/.composer/auth.json.j2
+        dest: "{{ composer_home_path }}/auth.json"
+        owner: "{{ composer_home_owner }}"
+        group: "{{ composer_home_group }}"
+
+    - name: create empty mysql database
+      mysql_db:
+        name: "{{ magento_db_name }}"
+        state: present
+
+    - name: create mysql user
+      mysql_user:
+        name: "{{ magento_db_user }}"
+        password: "{{ magento_db_pass }}"
+        priv: "{{ magento_db_name }}.*:ALL"
+        state: present
+
+    - name: remove old m2 directory
+      file:
+        state: absent
+        path: /var/www/vhosts/magento2
+
+    - name: create m2 directory
+      file:
+        state: directory
+        path: /var/www/vhosts/magento2
+        mode: 0755

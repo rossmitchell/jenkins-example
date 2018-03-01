@@ -1,0 +1,3 @@
+[jenkins]
+195.201.92.231 ansible_ssh_user=root
+195.201.92.230 ansible_ssh_user=root
