@@ -32,14 +32,13 @@ pipeline {
                         sh 'ls -lah'
                     }
                 }
-                stage('Run Test on different Machine?') {
+                stage('Can move the content into the webroot') {
                     agent {
                         label 'testMachine'
                     }
                     steps {
-                        echo 'Should be somewhere else'
-                        sh 'sleep 5'
-                        echo 'done'
+                        sh 'runTest.sh'
+                        sh 'wget -qO- www.magento2.dev'
                     }
                 }
                 stage('Really should be some where else') {

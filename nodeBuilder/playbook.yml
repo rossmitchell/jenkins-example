@@ -65,6 +65,3 @@
       lineinfile:
         path: /etc/hosts
         line: "127.0.0.1 {{ magento_domain }}"
-
-    - name: create a test file to ensure the web requests are working
-      shell: "echo '<?php echo \'hello\'; ' > {{ magento_web_root }}/pub/index.php"
