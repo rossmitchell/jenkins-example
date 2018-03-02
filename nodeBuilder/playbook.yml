@@ -22,12 +22,28 @@
 
   tasks:
 
+    - name: create a user that will run the tests
+      user:
+        name: jenkins-runner
+        groups: "{{ php_fpm_pool_group }}"
+        append: yes
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+
+    - name: Ensure composer directory exists.
+      file:
+        path: /home/jenkins-runner/.composer
+        owner: jenkins-runner
+        group: jenkins-runner
+        state: directory
+
     - name: create the magento composer auth file
       template:
         src: templates/root/.composer/auth.json.j2
-        dest: "{{ composer_home_path }}/auth.json"
-        owner: "{{ composer_home_owner }}"
-        group: "{{ composer_home_group }}"
+        dest: /home/jenkins-runner/.composer/auth.json"
+        owner: jenkins-runner
+        group: jenkins-runner
 
     - name: create empty mysql database
       mysql_db:
@@ -40,15 +56,6 @@
         password: "{{ magento_db_pass }}"
         priv: "{{ magento_db_name }}.*:ALL"
         state: present
-
-    - name: create a user that will run the tests
-      user:
-        name: jenkins-runner
-        groups: "{{ php_fpm_pool_group }}"
-        append: yes
-        generate_ssh_key: yes
-        ssh_key_bits: 2048
-        ssh_key_file: .ssh/id_rsa
 
     - name: create web folder
       file:
