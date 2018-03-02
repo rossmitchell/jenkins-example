@@ -37,7 +37,7 @@ pipeline {
                         label 'testMachine'
                     }
                     steps {
-                        sh 'runTest.sh'
+                        sh "$WORKSPACE/runTest.sh"
                         sh 'wget -qO- www.magento2.dev'
                     }
                 }
