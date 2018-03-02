@@ -34,6 +34,13 @@
         priv: "{{ magento_db_name }}.*:ALL"
         state: present
 
+    - name: create web folder
+      file:
+        state: directory
+        path: /var/www/vhost/magento2
+        mode: 0755
+
+
     - name: get the swarm JAR
       get_url:
         url: "{{ jenkins_url }}swarm/swarm-client.jar"
@@ -42,4 +49,4 @@
 
     - name: associate machine with jenkins
     # Need to disown this
-      shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -executors 1  &"
+      shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot /var/www/vhost/magento2 -executors 1  &"
