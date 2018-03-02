@@ -49,12 +49,12 @@
 
     - name: get the swarm JAR
       get_url:
-        url: "{{ jenkins_url }}swarm/swarm-client.jar"
+        url: "{{ jenkins_url }}/swarm/swarm-client.jar"
         dest: /tmp/swarm-client.jar
         mode: 0555
 
-#    - name: associate machine with jenkins
-#      shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot {{ magento_web_root }} -executors 1  &"
+    - name: associate machine with jenkins
+      shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot {{ magento_web_root }} -executors 1  &"
 
     - name: configure nginx
       template:
