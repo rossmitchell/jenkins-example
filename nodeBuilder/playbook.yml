@@ -44,7 +44,9 @@
     - name: create web folder
       file:
         state: directory
-        path: "{{ magento_web_root }}/pub"
+        path: "{{ magento_web_root }}"
+        owner: "{{ php_fpm_pool_user }}"
+        group: "{{ php_fpm_pool_group }}"
         mode: 0755
 
     - name: get the swarm JAR
@@ -55,6 +57,8 @@
 
     - name: associate machine with jenkins
       shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot {{ magento_web_root }} -executors 1  &"
+      become: true
+      become_user: "{{ php_fpm_pool_user }}"
 
     - name: configure nginx
       template:

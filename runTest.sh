@@ -37,7 +37,7 @@ php ${webDirectory}/bin/magento setup:install \
  --use-rewrites=0 \
  --backend-frontname=admin
 
- chown -R www-data ${webDirectory}
+# chown -R www-data ${webDirectory}
 
 ls -lah
 
