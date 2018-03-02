@@ -30,6 +30,17 @@
         ssh_key_bits: 2048
         ssh_key_file: .ssh/id_rsa
 
+    - name: Configure php-fpm pool (if enabled).
+      lineinfile:
+        dest: "{{ php_fpm_pool_conf_path }}"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+      with_items:
+        - regexp: "^user.?=.+$"
+          line: "user = jenkins-runner"
+      notify: restart php-fpm
+
     - name: Ensure composer directory exists.
       file:
         path: /home/jenkins-runner/.composer
