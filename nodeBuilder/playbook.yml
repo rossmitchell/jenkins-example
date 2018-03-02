@@ -41,7 +41,7 @@
     - name: create the magento composer auth file
       template:
         src: templates/root/.composer/auth.json.j2
-        dest: /home/jenkins-runner/.composer/auth.json"
+        dest: /home/jenkins-runner/.composer/auth.json
         owner: jenkins-runner
         group: jenkins-runner
 
