@@ -4,6 +4,7 @@
   vars_files:
     - vars/main.yml
   vars:
+    php_fpm_pool_user: jenkins-runner
     magento_domain: "{{ lookup('env', 'magento_domain')|default(default_magento_domain, true) }}"
     magento_composer_username: "{{ lookup('env', 'magento_composer_username')|default(default_magento_composer_username, true) }}"
     magento_composer_password: "{{ lookup('env', 'magento_composer_password')|default(default_magento_composer_password, true) }}"
@@ -40,7 +41,7 @@
         - regexp: "^user.?=.+$"
           line: "user = jenkins-runner"
         - regexp: "^listen.?=.+$"
-          line: "jenkins-runner"
+          line: "listen = jenkins-runner"
       notify: restart php-fpm
 
     - name: Ensure composer directory exists.
