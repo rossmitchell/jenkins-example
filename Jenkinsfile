@@ -9,6 +9,9 @@ pipeline {
             }
         }
         stage('Test') {
+            agent {
+                label 'testMachine'
+            }
             parallel {
                 stage('Run First Test') {
                     steps {
