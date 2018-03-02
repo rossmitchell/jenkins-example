@@ -38,7 +38,8 @@ pipeline {
                     }
                     steps {
                         sh "$WORKSPACE/runTest.sh"
-                        sh 'wget -qO- www.magento2.dev'
+                        sh 'wget -O $WORKSPACE/output www.magento2.dev'
+                        sh 'cat $WORKSPACE/output'
                     }
                 }
                 stage('Really should be some where else') {
@@ -48,17 +49,6 @@ pipeline {
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
-                        sh 'hostname'
-                        echo 'Done'
-                    }
-                }
-                stage('Really should be some where else 2') {
-                    agent {
-                        label 'testMachine'
-                    }
-                    steps {
-                        echo 'Please let this work'
-                        sh 'wget -qO- www.magento2.dev'
                         sh 'hostname'
                         echo 'Done'
                     }
