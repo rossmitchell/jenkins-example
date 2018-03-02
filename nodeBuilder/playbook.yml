@@ -40,8 +40,8 @@
       with_items:
         - regexp: "^user.?=.+$"
           line: "user = jenkins-runner"
-        - regexp: "^listen.group.?=.+$"
-          line: "listen.group = jenkins-runner"
+        - regexp: "^listen.owner.?=.+$"
+          line: "listen.owner = jenkins-runner"
       notify: restart php-fpm
 
     - name: Ensure composer directory exists.
