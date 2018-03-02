@@ -1,0 +1,49 @@
+---
+# These two came from the default script
+ntp_timezone: Europe/London
+firewall_allowed_tcp_ports:
+  - "22"
+  - "25"
+  - "80"
+  - "443"
+  - "8080"
+
+# These are the details that you will use to log into jenkins with
+jenkins_admin_username: admin
+jenkins_admin_password: admin
+jenkins_dynamic_admin_username: "{{ jenkins_admin_username }}"
+jenkins_dynamic_admin_password: "{{ jenkins_admin_password }}"
+jenkins_url_local: http://www.example.com
+
+
+jenkins_process_user: jenkins
+jenkins_process_group: jenkins
+
+# These are the plugins that we are installing - a work in progress at the moment
+jenkins_plugins_extra:
+  - "slave-setup"
+  - "ansible"
+  - "bitbucket"
+  - "workflow-multibranch"
+  - "checkstyle"
+  - "cloverphp"
+  - "crap4j"
+  - "dry"
+  - "htmlpublisher"
+  - "jdepend"
+  - "plot"
+  - "pmd"
+  - "violations"
+  - "warnings"
+  - "xunit"
+  - "git"
+  - "swarm"
+
+# The name and details of the project
+project_name: my-test-project # Internal ID
+project_display_name: My New Test Project # Display name
+project_description: A description of the project
+# Where the repo live - you will need to configure access manually
+project_repo_url: ''
+
+hcloud_api_token: ''

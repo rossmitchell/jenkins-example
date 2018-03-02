@@ -1,0 +1,127 @@
+---
+- hosts: jenkins
+  gather_facts: yes
+  vars_files:
+    - roles/karlmdavis.jenkins2/defaults/main.yml
+    - vars/main.yml
+
+  roles:
+    - geerlingguy.git
+    - geerlingguy.ntp
+    - geerlingguy.java
+    - geerlingguy.ansible
+#    - geerlingguy.jenkins
+
+  tasks:
+
+    - import_role:
+        name: karlmdavis.jenkins2
+      vars:
+        jenkins_admin_username: admin
+        jenkins_admin_password: admin
+
+    - name: create jenkins project directory
+      file:
+        state: directory
+        path: "{{ jenkins_home }}/jobs/{{ project_name }}"
+        owner: "{{ jenkins_process_user }}"
+        group: "{{ jenkins_process_group }}"
+        mode: 0755
+
+    - name: create the project config.xml file
+      template:
+        src: templates/var/lib/jenkins/jobs/project/config.xml.j2
+        dest: "{{ jenkins_home }}/jobs/{{ project_name }}/config.xml"
+        owner: "{{ jenkins_process_user }}"
+        group: "{{ jenkins_process_group }}"
+      notify:
+          - "Restart Service 'jenkins'"
+
+    - name: Configure Security
+      jenkins_script:
+        url: "{{ jenkins_url_local }}"
+        user: "{{ jenkins_dynamic_admin_username | default(omit) }}"
+        password: "{{ jenkins_dynamic_admin_password | default(omit) }}"
+        script: |
+          // These are the basic imports that Jenkin's interactive script console
+          // automatically includes.
+          import jenkins.*;
+          import jenkins.model.*;
+          import hudson.*;
+          import hudson.model.*;
+
+          // Configure the security realm, which handles authentication.
+          def securityRealm = new hudson.security.HudsonPrivateSecurityRealm(false)
+          if(!securityRealm.equals(Jenkins.instance.getSecurityRealm())) {
+            Jenkins.instance.setSecurityRealm(securityRealm)
+
+            // Create a user to login with. Ensure that user is bound to the
+            // system-local `jenkins` user's SSH key, to ensure that this
+            // account can be used with Jenkins' CLI.
+            def testUser = securityRealm.createAccount("{{ jenkins_admin_username }}", "{{ jenkins_admin_password }}")
+            testUser.addProperty(new hudson.tasks.Mailer.UserProperty("foo@example.com"));
+            testUser.save()
+
+            Jenkins.instance.save()
+            println "Changed authentication."
+          }
+
+          // Configure the authorization strategy, which specifies who can do
+          // what.
+          def authorizationStrategy = new hudson.security.FullControlOnceLoggedInAuthorizationStrategy()
+          if(!authorizationStrategy.equals(Jenkins.instance.getAuthorizationStrategy())) {
+            authorizationStrategy.setAllowAnonymousRead(false)
+            Jenkins.instance.setAuthorizationStrategy(authorizationStrategy)
+            Jenkins.instance.save()
+            println "Changed authorization."
+          }
+
+    - name: Fetch Hetzner Cloud CLI tool
+      unarchive:
+          src: https://github.com/hetznercloud/cli/releases/download/v1.3.0/hcloud-linux-amd64-v1.3.0.tar.gz
+          dest: /tmp/
+          remote_src: yes
+
+    - name: Place the binary into PATH
+      copy:
+        remote_src: True
+        src: /tmp/hcloud-linux-amd64-v1.3.0/bin/hcloud
+        dest: /usr/local/bin
+        mode: 755
+
+    - name: create the hcloud config directory
+      file:
+        state: directory
+        path: "{{ jenkins_home }}/.config/hcloud/"
+        owner: "{{ jenkins_process_user }}"
+        group: "{{ jenkins_process_group }}"
+        mode: 0700
+
+    - name: setup the hcloud context
+      template:
+        src: templates/var/lib/jenkins/.config/hcloud/cli.toml.j2
+        dest: "{{ jenkins_home }}/.config/hcloud/cli.toml"
+        owner: "{{ jenkins_process_user }}"
+        group: "{{ jenkins_process_group }}"
+
+    - name: generate a SSH key for the jenkins user
+      user:
+        name: "{{ jenkins_process_user }}"
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+      register: jenkinssshkey
+
+    - name: delete key with hcloud (if there)
+      command: hcloud ssh-key delete jenkinsServer
+      become: true
+      become_user: "{{ jenkins_process_user }}"
+      ignore_errors: yes
+      when: jenkinssshkey.changed
+
+    - name: assoicate key with hcloud
+      command: hcloud ssh-key create --name jenkinsServer --public-key-from-file {{ jenkins_home }}/.ssh/id_rsa.pub
+      become: true
+      become_user: "{{ jenkins_process_user }}"
+      when: jenkinssshkey.changed
+

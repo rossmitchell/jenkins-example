@@ -7,14 +7,19 @@ php_packages_extra:
   - php7.0-soap
 php_webserver_daemon: nginx
 # Composer Details
-magento_composer_username: ''
-magento_composer_password: ''
+default_magento_composer_username: ''
+default_magento_composer_password: ''
 # Database details
 magento_db_name: magento2
 magento_db_user: magento2
 magento_db_pass: magento2
+# Nginx details
+magento_web_root: /var/www/vhosts/magento2
+default_magento_domain: www.magento2.dev
+
+
 # Swarm settings
-jenkins_url: http://195.201.90.139:8080/
-jenkins_username: admin
-jenkins_password: admin
+default_jenkins_url: ''
+default_jenkins_username: ''
+default_jenkins_password: ''
 

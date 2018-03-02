@@ -3,6 +3,13 @@
   sudo: yes
   vars_files:
     - vars/main.yml
+  vars:
+    magento_domain: "{{ lookup('env', 'magento_domain')|default(default_magento_domain, true) }}"
+    magento_composer_username: "{{ lookup('env', 'magento_composer_username')|default(default_magento_composer_username, true) }}"
+    magento_composer_password: "{{ lookup('env', 'magento_composer_password')|default(default_magento_composer_password, true) }}"
+    jenkins_url: "{{ lookup('env', 'jenkins_url')|default(default_jenkins_url, true) }}"
+    jenkins_username: "{{ lookup('env', 'jenkins_username')|default(default_jenkins_username, true) }}"
+    jenkins_password: "{{ lookup('env', 'jenkins_password')|default(default_jenkins_password, true) }}"
 
   roles:
     - geerlingguy.git
@@ -37,9 +44,8 @@
     - name: create web folder
       file:
         state: directory
-        path: /var/www/vhost/magento2
+        path: "{{ magento_web_root }}"
         mode: 0755
-
 
     - name: get the swarm JAR
       get_url:
@@ -47,6 +53,15 @@
         dest: /tmp/swarm-client.jar
         mode: 0555
 
-    - name: associate machine with jenkins
-    # Need to disown this
-      shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot /var/www/vhost/magento2 -executors 1  &"
+#    - name: associate machine with jenkins
+#      shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot {{ magento_web_root }} -executors 1  &"
+
+    - name: configure nginx
+      template:
+        src: templates/etc/nginx/conf.d/magento.conf.j2
+        dest: /etc/nginx/conf.d/magento2.conf
+
+    - name: update hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "127.0.0.1 {{ magento_domain }}"
