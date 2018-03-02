@@ -10,10 +10,10 @@ pipeline {
         }
         stage('Test') {
             parallel {
-                agent {
-                    label 'testMachine'
-                }
                 stage('Run First Test') {
+                    agent {
+                        label 'testMachine'
+                    }
                     steps {
                         sh 'touch testFile'
                         sh 'sleep 2'
@@ -22,6 +22,9 @@ pipeline {
                     }
                 }
                 stage('Run Second Test') {
+                    agent {
+                        label 'testMachine'
+                    }
                     steps {
                         sh 'date'
                         echo "Running the second test suite"
@@ -30,6 +33,9 @@ pipeline {
                     }
                 }
                 stage('Run Test on different Machine?') {
+                    agent {
+                        label 'testMachine'
+                    }
                     steps {
                         echo 'Should be somewhere else'
                         sh 'sleep 5'
@@ -37,6 +43,9 @@ pipeline {
                     }
                 }
                 stage('Really should be some where else') {
+                    agent {
+                        label 'testMachine'
+                    }
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
@@ -45,6 +54,9 @@ pipeline {
                     }
                 }
                 stage('Really should be some where else 2') {
+                    agent {
+                        label 'testMachine'
+                    }
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
@@ -53,6 +65,9 @@ pipeline {
                     }
                 }
                 stage('Really should be some where else 3') {
+                    agent {
+                        label 'testMachine'
+                    }
                     steps {
                         echo 'Please let this work'
                         sh 'sleep 60'
