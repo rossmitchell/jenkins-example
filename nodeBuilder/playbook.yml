@@ -39,6 +39,8 @@
       with_items:
         - regexp: "^user.?=.+$"
           line: "user = jenkins-runner"
+        - regexp: "^listen.?=.+$"
+          line: "jenkins-runner"
       notify: restart php-fpm
 
     - name: Ensure composer directory exists.
