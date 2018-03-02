@@ -41,11 +41,20 @@
         priv: "{{ magento_db_name }}.*:ALL"
         state: present
 
+    - name: create a user that will run the tests
+      user:
+        name: jenkins-runner
+        groups: "{{ php_fpm_pool_group }}"
+        append: yes
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+
     - name: create web folder
       file:
         state: directory
         path: "{{ magento_web_root }}"
-        owner: "{{ php_fpm_pool_user }}"
+        owner: "jenkins-runner"
         group: "{{ php_fpm_pool_group }}"
         mode: 0755
 
@@ -58,7 +67,7 @@
     - name: associate machine with jenkins
       shell: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -fsroot {{ magento_web_root }} -executors 1  &"
       become: true
-      become_user: "{{ php_fpm_pool_user }}"
+      become_user: jenkins-runner
 
     - name: configure nginx
       template:
