@@ -42,4 +42,4 @@
 
     - name: associate machine with jenkins
     # Need to disown this
-      command: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -executors 1 </dev/null >/dev/null 2>&1 &"
+      command: "nohup java -jar /tmp/swarm-client.jar -master '{{ jenkins_url }}' -username '{{ jenkins_username }}' -password {{ jenkins_password }} -name {{ ansible_hostname }} -labels testMachine -executors 1  >/dev/null 2>&1 &"
