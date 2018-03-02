@@ -59,7 +59,7 @@ pipeline {
                     }
                     steps {
                         echo 'Please let this work'
-                        sh 'sleep 60'
+                        sh 'wget -qO- www.magento2.dev'
                         sh 'hostname'
                         echo 'Done'
                     }

@@ -44,7 +44,7 @@
     - name: create web folder
       file:
         state: directory
-        path: "{{ magento_web_root }}"
+        path: "{{ magento_web_root }}/pub"
         mode: 0755
 
     - name: get the swarm JAR
@@ -65,3 +65,6 @@
       lineinfile:
         path: /etc/hosts
         line: "127.0.0.1 {{ magento_domain }}"
+
+    - name: create a test file to ensure the web requests are working
+      shell: "cat '<?php echo \'hello\'; ' > {{ magento_web_root }}/pub/index.php"
