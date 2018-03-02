@@ -27,6 +27,7 @@ pipeline {
                     }
                     steps {
                         sh 'date'
+                        sh 'whoami'
                         echo "Running the second test suite"
                         sh 'pwd'
                         sh 'ls -lah'
