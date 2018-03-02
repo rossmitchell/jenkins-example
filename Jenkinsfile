@@ -76,7 +76,7 @@ pipeline {
     post {
         always {
             echo "Remove the servers that have been created"
-            sh 'nodeBuilder/destroyTestServers.sh'
+            echo "Not this time"
         }
     }
 }
