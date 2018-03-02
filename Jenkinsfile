@@ -9,10 +9,10 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
-                label 'testMachine'
-            }
             parallel {
+                agent {
+                    label 'testMachine'
+                }
                 stage('Run First Test') {
                     steps {
                         sh 'touch testFile'
